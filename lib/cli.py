@@ -1,5 +1,5 @@
-from lib.helpers import db_session
-from lib.db.models import FitnessLog
+from helpers import db_session
+from db.models import FitnessLog
 
 if __name__ == "__main__":
     while True:
