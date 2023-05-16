@@ -10,10 +10,10 @@ if __name__ == "__main__":
         choice = input("Enter your choice: ")
 
         if choice == "1":
-            # Add fitness log entry
+            print("Add fitness log entry")
             pass
         elif choice == "2":
-            # View fitness log entries
+            print("View fitness log entries")
             pass
         elif choice == "3":
             break
