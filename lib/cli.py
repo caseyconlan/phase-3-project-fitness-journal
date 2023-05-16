@@ -35,6 +35,15 @@ def add_fitness_log():
 
     print("Fitness log added!")
 
+    
+@click.command()
+def view_fitness_log():
+    """View all fitness log entries."""
+    logs = db_session.query(FitnessLog).all()
+    for log in logs:
+        print(f"{log.date} - {log.exercise} - {log.exercise_type.value} - {log.weight_or_speed} - {log.reps_or_time} - {log.muscle_group} - {log.journal_entry}")
+
+
 if __name__ == "__main__":
     while True:
         print("1. Add Fitness Log")
@@ -52,9 +61,4 @@ if __name__ == "__main__":
         else:
             print("Invalid choice. Please try again.")
             
-@click.command()
-def view_fitness_log():
-    """View all fitness log entries."""
-    logs = db_session.query(FitnessLog).all()
-    for log in logs:
-        print(f"{log.date} - {log.exercise} - {log.exercise_type.value} - {log.weight_or_speed} - {log.reps_or_time} - {log.muscle_group} - {log.journal_entry}")
+
