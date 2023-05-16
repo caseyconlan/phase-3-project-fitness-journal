@@ -4,8 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-ipdb = "*"
-sqlalchemy = "*"
+requests = "*"
+SQLAlchemy = "*"
 alembic = "*"
 
 [dev-packages]
