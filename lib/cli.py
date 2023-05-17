@@ -11,7 +11,7 @@ def add_fitness_log():
     init_db()
 
     date = input("Enter the date (mm-dd-yyyy): ")
-    date = datetime.strptime(date, "%Y-%m-%d").date()
+    date = datetime.strptime(date, "%m-%d-%Y").date()
 
     exercise = input("Enter the name of the exercise: ")
 
@@ -83,7 +83,7 @@ def bmi():
     init_db()
 
     date = input("Enter the date (mm-dd-yyyy): ")
-    date = datetime.strptime(date, "%Y-%m-%d").date()
+    date = datetime.strptime(date, "%m-%d-%Y").date()
 
     weight = float(input("Enter your weight (in lbs): "))
     height = float(input("Enter your height (in inches): "))
@@ -92,11 +92,9 @@ def bmi():
     bmi_value = (703 * weight) / (height * height)
     bmi_value = round(bmi_value, 2)
 
-    # journal_entry = input("Enter any additional notes: ")
-    # , journal_entry=journal_entry
-    """put back in after testing"""
+    journal_entry = input("Enter any additional notes: ")
 
-    new_bmi = BMI(date=date, height=height, weight=weight, bmi=bmi_value)
+    new_bmi = BMI(date=date, height=height, weight=weight, bmi=bmi_value, journal_entry=journal_entry)
     db_session.add(new_bmi)
     db_session.commit()
 
