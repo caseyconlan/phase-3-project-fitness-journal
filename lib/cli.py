@@ -53,6 +53,8 @@ def add_food_log():
     db_session.add(new_food_log)
     db_session.commit()
 
+    print("Food log added!")
+
 
 @click.command()
 def view_food_log():
