@@ -46,6 +46,8 @@ def view_fitness_log():
 
 if __name__ == "__main__":
     while True:
+        print("Welcome to LiftATon!")
+        print("❚█══█❚ ❚█══█❚ ❚█══█❚")
         print("1. Add Fitness Log")
         print("2. View Fitness Log")
         print("3. Exit")
