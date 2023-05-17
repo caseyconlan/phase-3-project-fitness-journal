@@ -17,3 +17,24 @@ class FitnessLog(Base):
     reps_or_time = Column(Integer)
     muscle_group = Column(String(120))
     journal_entry = Column(String(500))
+
+class FoodLog(Base):
+    __tablename__ = 'food_logs'
+    id = Column(Integer, primary_key=True)
+    date = Column(Date)
+    food = Column(String(120))
+    calories = Column(Integer)
+    journal_entry = Column(String(500))
+
+
+class BMI(Base):
+    # https://www.cdc.gov/healthyweight/assessing/bmi/adult_bmi/index.html#Interpreted
+    """Formula: weight (lb) / [height (in)]2 x 703"""
+    __tablename__='bmi'
+    id = Column(Integer, primary_key=True)
+    date = Column(Date)
+    height = Column(Integer)
+    # fix above - figure out how to make it 5'6" format
+    weight = Column(Integer)
+    bmi = Column(Integer)
+    journal_entry = Column(String(500))
