@@ -10,7 +10,7 @@ def cli():
 def add_fitness_log():
     init_db()
 
-    date = input("Enter the date (yyyy-mm-dd): ")
+    date = input("Enter the date (mm-dd-yyyy): ")
     date = datetime.strptime(date, "%Y-%m-%d").date()
 
     exercise = input("Enter the name of the exercise: ")
@@ -78,12 +78,27 @@ def sum_calories():
     # if date == date:
     #     return "Total Calories on {date} = {total}"
 
-@click.command()
 def bmi():
     """Calculates BMI Based On Input"""
-    logs = db_session.query(BMI).all()
-    for log in logs:
-        print(f"{log.date} - {log.height} - {log.weight} - {log.bmi} - {log.journal_entry}")
+    init_db()
+
+    date = input("Enter the date (mm-dd-yyyy): ")
+    date = datetime.strptime(date, "%Y-%m-%d").date()
+
+    weight = float(input("Enter your weight (in lbs): "))
+    height = float(input("Enter your height (in inches): "))
+
+    # Calculate BMI
+    bmi_value = (703 * weight) / (height * height)
+    bmi_value = round(bmi_value, 2)
+
+    journal_entry = input("Enter any additional notes: ")
+
+    new_bmi = BMI(date=date, height=height, weight=weight, bmi=bmi_value, journal_entry=journal_entry)
+    db_session.add(new_bmi)
+    db_session.commit()
+
+    print(f"Your BMI is: {bmi_value}")
 
 
 print("Welcome to LiftATon!")
@@ -95,10 +110,11 @@ if __name__ == "__main__":
         print("3. Add Food & Calories")
         print("4. View Food Log")
         print("5. Total Calories Per Date")
-        print("6. BMI Calculator")
-        print("7. Exit")
+        print("6. Calculate BMI")
+        print("7. Delete Entry")
+        print("8. Exit")
         print("❚█══█❚ ❚█══█❚ ❚█══█❚")  
-        
+
         choice = input("Enter your choice: ")
 
         if choice == "1":
@@ -107,14 +123,16 @@ if __name__ == "__main__":
             view_fitness_log()
         elif choice == "3":
             add_food_log()
-        elif choice =="4":
+        elif choice == "4":
             view_food_log()
         elif choice == "5":
-            bmi()
+            sum_calories()
         elif choice == "6":
+            bmi()
+        elif choice == "7":
+            entry_id = int(input("Enter the ID of the entry to delete: "))
+            delete_entry(entry_id)
+        elif choice == "8":
             break
         else:
             print("Invalid choice. Please try again.")
-
-          
-
