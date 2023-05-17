@@ -92,14 +92,35 @@ def bmi():
     bmi_value = (703 * weight) / (height * height)
     bmi_value = round(bmi_value, 2)
 
-    journal_entry = input("Enter any additional notes: ")
+    # journal_entry = input("Enter any additional notes: ")
+    # , journal_entry=journal_entry
+    """put back in after testing"""
 
-    new_bmi = BMI(date=date, height=height, weight=weight, bmi=bmi_value, journal_entry=journal_entry)
+    new_bmi = BMI(date=date, height=height, weight=weight, bmi=bmi_value)
     db_session.add(new_bmi)
     db_session.commit()
 
     print(f"Your BMI is: {bmi_value}")
 
+def delete_entry():
+    entry_id = int(input("Enter the entry ID to delete: "))
+    entry_type = ""
+    while entry_type not in ["Fitness", "Food", "BMI"]:
+        entry_type = input("Enter the entry type ('Fitness' or 'Food' or 'BMI'): ")
+
+    if entry_type == "Fitness":
+        entry = db_session.query(FitnessLog).get(entry_id)
+    elif entry_type == "Food":
+        entry = db_session.query(FoodLog).get(entry_id)
+    elif entry_type == "BMI":
+        entry = db_session.query(BMI).get(entry_id)
+
+    if entry:
+        db_session.delete(entry)
+        db_session.commit()
+        click.echo(f"{entry_type} entry with ID {entry_id} has been deleted.")
+    else:
+        click.echo(f"No {entry_type} entry found with ID {entry_id}.")
 
 print("Welcome to LiftATon!")
 print("❚█══█❚ ❚█══█❚ ❚█══█❚")
