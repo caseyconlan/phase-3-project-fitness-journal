@@ -44,14 +44,15 @@ def view_fitness_log():
         print(f"{log.date} - {log.exercise} - {log.exercise_type.value} - {log.weight_or_speed} - {log.reps_or_time} - {log.muscle_group} - {log.journal_entry}")
 
 
+print("Welcome to LiftATon!")
+print("❚█══█❚ ❚█══█❚ ❚█══█❚")
 if __name__ == "__main__":
     while True:
-        print("Welcome to LiftATon!")
-        print("❚█══█❚ ❚█══█❚ ❚█══█❚")
         print("1. Add Fitness Log")
         print("2. View Fitness Log")
         print("3. Exit")
-
+        print("❚█══█❚ ❚█══█❚ ❚█══█❚")  
+        
         choice = input("Enter your choice: ")
 
         if choice == "1":
@@ -62,5 +63,6 @@ if __name__ == "__main__":
             break
         else:
             print("Invalid choice. Please try again.")
-            
+
+          
 
