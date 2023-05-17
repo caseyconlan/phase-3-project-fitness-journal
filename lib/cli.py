@@ -11,7 +11,7 @@ def cli():
 def add_fitness_log():
     init_db()
 
-    date = input("Enter the date (yyyy-mm-dd): ")
+    date = input("Enter the date (mm-dd-yyyy): ")
     date = datetime.strptime(date, "%Y-%m-%d").date()
 
     exercise = input("Enter the name of the exercise: ")
@@ -81,7 +81,7 @@ def bmi():
     """Calculates BMI Based On Input"""
     init_db()
 
-    date = input("Enter the date (yyyy-mm-dd): ")
+    date = input("Enter the date (mm-dd-yyyy): ")
     date = datetime.strptime(date, "%Y-%m-%d").date()
 
     weight = float(input("Enter your weight (in lbs): "))
