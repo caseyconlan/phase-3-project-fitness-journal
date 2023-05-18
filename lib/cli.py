@@ -34,7 +34,7 @@ def add_fitness_log():
     db_session.add(new_log)
     db_session.commit()
 
-    print("Fitness log added!")
+    print(f"💪","Fitness log added!",f"💪")
 
 def add_food_log():
     """Allows user to input food data"""
@@ -54,7 +54,7 @@ def add_food_log():
     db_session.add(new_food_log)
     db_session.commit()
 
-    print("Food log added!")
+    print(f"🍏","Food log added!"f"🍏")
 
 
 @click.command()
@@ -81,7 +81,7 @@ def sum_calories():
     if total_calories is None:
         total_calories = 0
 
-    print(f"❚█══█❚", f"Total calories for {date.strftime('%m-%d-%Y')}: {total_calories}", f"❚█══█❚")
+    print(f"🍏", f"Total calories for {date.strftime('%m-%d-%Y')}: {total_calories}", f"🍏")
 
 def bmi():
     """Calculates BMI Based On Input"""
