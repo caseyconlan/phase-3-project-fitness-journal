@@ -1,0 +1,42 @@
+}    
+    [python]": {
+    "editor.formatOnType": true
+    },
+    "editor.inlineSuggest.enabled": true,
+    "python.pythonPath": "C:\\Users\\princ\\Downloads\\New folder\\python.exe",
+    "python.terminal.activateEnvironment": true,
+    "redhat.telemetry.enabled": true,
+    "workbench.colorTheme": "SynthWave '84",
+    "settingsSync.ignoredExtensions": [
+    "tht13.python"
+    ],
+    "python.terminal.activateEnvInCurrentTerminal": true,
+    "settingsSync.ignoredSettings": [
+    "isort.interpreter",
+    "editor.unicodeHighlight.allowedCharacters"
+    ],
+    "files.autoSave": "afterDelay",
+    "github.copilot.enable": {
+
+    "*": true,
+    "plaintext": false,
+    "markdown": true,
+    "scminput": false
+    },
+    "workbench.colorCustomizations": {},
+    "editor.fontSize": 20,
+    "window.menuBarVisibility": "compact",
+    "gitlens.views.commitDetails.files.layout": "list",
+    "window.zoomLevel": 1,
+    "docker.containers.groupBy": "ImageId",
+    "docker.images.groupBy": "RepositoryNameAndTag",
+    "python.autoComplete.extraPaths": [
+    
+    ],
+    "workbench.iconTheme": "helium-icon-theme",
+    "github.copilot.advanced": {
+    
+    },
+    "workbench.productIconTheme": "emoji-product-icons-fun"
+}
+    
