@@ -98,7 +98,11 @@ def bmi():
     db_session.add(new_bmi)
     db_session.commit()
 
-    print(f"Your BMI is: {bmi_value}")
+    
+    #print("❚█══█❚", end=" ")
+    print(f"❚█══█❚",f"Your BMI is: {bmi_value}", f"❚█══█❚")
+    #print("❚█══█❚")
+    
 
 def delete_entry():
     entry_id = int(input("Enter the entry ID to delete: "))
