@@ -2,6 +2,7 @@ import click
 from datetime import datetime
 from lib.db import db_session, init_db
 from lib.db.models import FitnessLog, ExerciseType, BMI, FoodLog 
+from sqlalchemy import func
 
 @click.group()
 def cli():
@@ -33,7 +34,7 @@ def add_fitness_log():
     db_session.add(new_log)
     db_session.commit()
 
-    print("Fitness log added!")
+    print(f"💪","Fitness log added!",f"💪")
 
 def add_food_log():
     """Allows user to input food data"""
@@ -53,7 +54,7 @@ def add_food_log():
     db_session.add(new_food_log)
     db_session.commit()
 
-    print("Food log added!")
+    print(f"🍏","Food log added!"f"🍏")
 
 
 @click.command()
@@ -69,14 +70,18 @@ def view_fitness_log():
     logs = db_session.query(FitnessLog).all()
     for log in logs:
         print(f"{log.date} - {log.exercise} - {log.exercise_type.value} - {log.weight_or_speed} - {log.reps_or_time} - {log.muscle_group} - {log.journal_entry}")
-@click.command()
+
 def sum_calories():
-    """Calculates all calories in your calorie row (should sum all calories per date)"""
-    # all_calories = for calories in calories
-    # sum = len(all_calories)
-    # total = sum(calories.all)
-    # if date == date:
-    #     return "Total Calories on {date} = {total}"
+    """Calculates total calories for a specified date."""
+    init_db()
+    date = input("Enter the date (mm-dd-yyyy): ")
+    date = datetime.strptime(date, "%m-%d-%Y").date()
+    total_calories = db_session.query(func.sum(FoodLog.calories)).filter(FoodLog.date == date).scalar()
+
+    if total_calories is None:
+        total_calories = 0
+
+    print(f"🍏", f"Total calories for {date.strftime('%m-%d-%Y')}: {total_calories}", f"🍏")
 
 def bmi():
     """Calculates BMI Based On Input"""
@@ -104,8 +109,7 @@ def bmi():
     #print("❚█══█❚")
     
 
-def delete_entry():
-    entry_id = int(input("Enter the entry ID to delete: "))
+def delete_entry(entry_id):
     entry_type = ""
     while entry_type not in ["Fitness", "Food", "BMI"]:
         entry_type = input("Enter the entry type ('Fitness' or 'Food' or 'BMI'): ")
@@ -123,6 +127,7 @@ def delete_entry():
         click.echo(f"{entry_type} entry with ID {entry_id} has been deleted.")
     else:
         click.echo(f"No {entry_type} entry found with ID {entry_id}.")
+
 
 print("Welcome to LiftATon!")
 print("❚█══█❚ ❚█══█❚ ❚█══█❚")
@@ -153,8 +158,7 @@ if __name__ == "__main__":
         elif choice == "6":
             bmi()
         elif choice == "7":
-            entry_id = int(input("Enter the ID of the entry to delete: "))
-            delete_entry(entry_id)
+            delete_entry()
         elif choice == "8":
             break
         else:
