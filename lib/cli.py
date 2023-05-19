@@ -1,16 +1,29 @@
-import click
-from datetime import datetime
-from lib.db import db_session, init_db
-from lib.db.models import FitnessLog, ExerciseType, BMI, FoodLog 
+from sqlalchemy import create_engine
 from sqlalchemy import func
+from sqlalchemy.orm import sessionmaker
+#from lib.user_manager import register_user
+from lib.db.models import init_db, FitnessLog, FoodLog, BMI, ExerciseType
+from datetime import datetime
+from lib.db.models import init_db, Base
+import click
+import sys
+
+engine = create_engine('sqlite:///fitness_journal.db')
+Session = sessionmaker(bind=engine)
+db_session = Session()
+
+def init_db_func(engine):
+    Base.metadata.create_all(bind=engine)
+
+
+def init_db(engine):
+    Base.metadata.create_all(bind=engine)
 
 @click.group()
 def cli():
     pass
 
 def add_fitness_log():
-    init_db()
-
     date = input("Enter the date (mm-dd-yyyy): ")
     date = datetime.strptime(date, "%m-%d-%Y").date()
 
@@ -18,7 +31,7 @@ def add_fitness_log():
 
     exercise_type = ""
     while exercise_type not in ExerciseType.__members__:
-        exercise_type = input("Enter the exercise type ('Strength Training' or 'Cardio'): ")
+        exercise_type = input("Enter the exercise type ('Strength' or 'Cardio'): ")
         exercise_type = exercise_type.replace(" ", "_").upper()
 
     exercise_type = ExerciseType[exercise_type]
@@ -36,11 +49,10 @@ def add_fitness_log():
 
     print(f"💪","Fitness log added!",f"💪")
 
+
+
 def add_food_log():
     """Allows user to input food data"""
-    init_db()
-
-
     date = input("Enter the date (mm-dd-yyyy): ")
     date = datetime.strptime(date, "%m-%d-%Y").date()
 
@@ -72,8 +84,11 @@ def view_fitness_log():
         print(f"{log.date} - {log.exercise} - {log.exercise_type.value} - {log.weight_or_speed} - {log.reps_or_time} - {log.muscle_group} - {log.journal_entry}")
 
 def sum_calories():
-    """Calculates total calories for a specified date."""
-    init_db()
+    engine = create_engine('sqlite:///fitness_journal.db')
+    Session = sessionmaker(bind=engine)
+    db_session = Session()
+    init_db_func(engine)
+
     date = input("Enter the date (mm-dd-yyyy): ")
     date = datetime.strptime(date, "%m-%d-%Y").date()
     total_calories = db_session.query(func.sum(FoodLog.calories)).filter(FoodLog.date == date).scalar()
@@ -85,8 +100,6 @@ def sum_calories():
 
 def bmi():
     """Calculates BMI Based On Input"""
-    init_db()
-
     date = input("Enter the date (mm-dd-yyyy): ")
     date = datetime.strptime(date, "%m-%d-%Y").date()
 
@@ -128,9 +141,50 @@ def delete_entry(entry_id):
     else:
         click.echo(f"No {entry_type} entry found with ID {entry_id}.")
 
+def register():
+    email = input("Please enter your email: ")
+    password = input("Please enter your password: ")
+    register_user(email, password)
+    print("Registration successful!")
+
+def login_user():
+    username = input('Please enter your username: ')
+    password = input('Please enter your password: ')
+    
+    return True
+
+def login():
+    email = input("Please enter your email: ")
+    password = input("Please enter your password: ")
+    user = login_user(email, password)
+    if user is None:
+        print("Login failed")
+    else:
+        print('Login successful')
+
 
 print("Welcome to LiftATon!")
 print("❚█══█❚ ❚█══█❚ ❚█══█❚")
+
+# Add user login/registration before entering the main loop
+while True:
+    print("1. Register")
+    print("2. Login")
+    print("3. Exit")
+
+    choice = input("Enter your choice: ")
+
+    if choice == "1":
+        register_user()
+    elif choice == "2":
+        if login_user():
+            break
+    elif choice == "3":
+        sys.exit()
+    else:
+        print("Invalid choice. Please try again.")
+
+# The main loop
 if __name__ == "__main__":
     while True:
         print("1. Add Fitness Log")
@@ -158,7 +212,8 @@ if __name__ == "__main__":
         elif choice == "6":
             bmi()
         elif choice == "7":
-            delete_entry()
+            entry_id = int(input("Enter the ID of the entry you want to delete: "))
+            delete_entry(entry_id)
         elif choice == "8":
             break
         else:

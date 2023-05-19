@@ -1,10 +1,31 @@
-from sqlalchemy import Column, Integer, String, Date, Enum
-from lib.db import Base
+from sqlalchemy import Column, Integer, String, ForeignKey, Enum, Date
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
+from sqlalchemy.sql.sqltypes import DateTime
+from sqlalchemy.sql import func
+from sqlalchemy.dialects.postgresql import UUID
 from enum import Enum as PyEnum
+import uuid
+import click
+
 
 class ExerciseType(PyEnum):
-    STRENGTH_TRAINING = "Strength Training"
-    CARDIO = "Cardio"
+    # Define your enum values here
+    CARDIO = 1
+    STRENGTH_TRAINING = 2
+    FLEXIBILITY = 3
+    STRENGTH = 4
+
+Base = declarative_base()
+
+
+class User(Base):
+    __tablename__ = 'users'
+    username = Column(String, primary_key=True)
+    # ... other columns in the User model
+
+    #food_logs = relationship("FoodLog", back_populates="user")  # Define the relationship with the FoodLog model
+
 
 class FitnessLog(Base):
     __tablename__ = 'fitness_logs'
@@ -18,23 +39,32 @@ class FitnessLog(Base):
     muscle_group = Column(String(120))
     journal_entry = Column(String(500))
 
+    #user_username = Column(String, ForeignKey('users.username'))
+    #user = relationship("User", back_populates="fitness_logs")
+
 class FoodLog(Base):
     __tablename__ = 'food_logs'
     id = Column(Integer, primary_key=True)
     date = Column(Date)
-    food = Column(String(120))
+    food = Column(String)
     calories = Column(Integer)
-    journal_entry = Column(String(500))
+    journal_entry = Column(String)
+    #user_username = Column(String, ForeignKey('users.username'))  # Define the foreign key relationship
 
+    #user = relationship("User", back_populates="food_logs")  # Define the relationship with the User model
 
 class BMI(Base):
-    # https://www.cdc.gov/healthyweight/assessing/bmi/adult_bmi/index.html#Interpreted
-    """Formula: weight (lb) / [height (in)]2 x 703"""
-    __tablename__='bmi'
+    __tablename__ = 'bmi'
     id = Column(Integer, primary_key=True)
     date = Column(Date)
     height = Column(Integer)
-    # fix above - figure out how to make it 5'6" format
     weight = Column(Integer)
     bmi = Column(Integer)
     journal_entry = Column(String(500))
+
+    #user_username = Column(String, ForeignKey('users.username'))
+    #user = relationship("User", back_populates="bmis")
+
+
+def init_db(engine):
+    Base.metadata.create_all(bind=engine)
