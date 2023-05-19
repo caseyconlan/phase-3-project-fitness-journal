@@ -1,3 +1,4 @@
+from logging import root
 from tkinter import *
 import tkinter.messagebox as tkMessageBox
 import sqlite3
@@ -16,6 +17,7 @@ USERNAME = StringVar()
 PASSWORD = StringVar()
 FIRSTNAME = StringVar()
 LASTNAME = StringVar()
+click_button = StringVar()
 
 # Create a login form
 def LoginForm():
@@ -68,7 +70,7 @@ def LoginForm():
         font=("arial", 12),
     )
     lbl_register.grid(row=0, sticky=W)
-    lbl_register.bind("<Button-1>", ToggleToRegister)
+    lbl_register.bind("<Button-1>", click_button)
 
 # Create a register form
 def RegisterForm():
@@ -152,4 +154,6 @@ def Login():
     cursor.close() # Close the cursor
     conn.close() # Close the connection
 
-    
+    if __name__ == "__main__":
+        main() 
+#I believe it decided to add this one to the database instead I could be wrong but the main means the main branch 

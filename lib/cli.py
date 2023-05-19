@@ -89,7 +89,7 @@ def bmi():
     height = float(input("Enter your height (in inches): "))
 
     # Calculate BMI
-    bmi_value = (703 * weight) / (height * height)
+    bmi_value = (703 * weight) / (height ** 2)
     bmi_value = round(bmi_value, 2)
 
     journal_entry = input("Enter any additional notes: ")
