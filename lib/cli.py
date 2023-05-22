@@ -1,10 +1,12 @@
 from sqlalchemy import create_engine
 from sqlalchemy import func
 from sqlalchemy.orm import sessionmaker
-#from lib.user_manager import register_user
-from lib.db.models import init_db, FitnessLog, FoodLog, BMI, ExerciseType
+from lib.user_manager import register_user, login_user
+from lib.db.models import init_db, FitnessLog, FoodLog, BMI, ExerciseType, User
 from datetime import datetime
 from lib.db.models import init_db, Base
+from getpass import getpass
+import hashlib
 import click
 import sys
 
@@ -14,6 +16,9 @@ db_session = Session()
 
 def init_db_func(engine):
     Base.metadata.create_all(bind=engine)
+
+if __name__ == "__main__":
+    init_db_func(engine)
 
 
 def init_db(engine):
@@ -31,7 +36,7 @@ def add_fitness_log():
 
     exercise_type = ""
     while exercise_type not in ExerciseType.__members__:
-        exercise_type = input("Enter the exercise type ('Strength' or 'Cardio'): ")
+        exercise_type = input("Enter the exercise type ('Strength' or 'Cardio' or 'Flexibility'): ")
         exercise_type = exercise_type.replace(" ", "_").upper()
 
     exercise_type = ExerciseType[exercise_type]
@@ -107,7 +112,7 @@ def bmi():
     height = float(input("Enter your height (in inches): "))
 
     # Calculate BMI
-    bmi_value = (703 * weight) / (height * height)
+    bmi_value = (703) * ((weight) / (height * height))
     bmi_value = round(bmi_value, 2)
 
     journal_entry = input("Enter any additional notes: ")
@@ -144,20 +149,29 @@ def delete_entry(entry_id):
 def register():
     email = input("Please enter your email: ")
     password = input("Please enter your password: ")
-    register_user(email, password)
     print("Registration successful!")
 
 def login_user():
-    username = input('Please enter your username: ')
-    password = input('Please enter your password: ')
-    
-    return True
+    username = input("Enter your username: ")
+    password = getpass("Enter your password: ")
+    # Hash the entered password to compare with the stored one
+    hashed_password = hashlib.sha256(password.encode()).hexdigest()
+    user = db_session.query(User).filter(User.username == username).first()
+    if user:
+        if user.password == hashed_password:
+            print("Login successful!")
+            return True
+        else:
+            print("Invalid password. Please try again.")
+            return False
+    else:
+        print("Invalid username. Please try again.")
+        return False
+
 
 def login():
-    email = input("Please enter your email: ")
-    password = input("Please enter your password: ")
-    user = login_user(email, password)
-    if user is None:
+    # Call the login_user function from lib/user_manager.py
+    if not login_user():
         print("Login failed")
     else:
         print('Login successful')

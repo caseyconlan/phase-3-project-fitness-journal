@@ -8,9 +8,12 @@ from enum import Enum as PyEnum
 import uuid
 import click
 
+Base = declarative_base()
+id = Column(Integer, primary_key=True)
+name = Column(String(50))
+new_column = Column(String(100))  # New column definition
 
 class ExerciseType(PyEnum):
-    # Define your enum values here
     CARDIO = 1
     STRENGTH_TRAINING = 2
     FLEXIBILITY = 3
@@ -20,9 +23,9 @@ Base = declarative_base()
 
 
 class User(Base):
-    __tablename__ = 'users'
+    __tablename__ = 'user_info'
     username = Column(String, primary_key=True)
-    # ... other columns in the User model
+    password = Column(String)
 
     #food_logs = relationship("FoodLog", back_populates="user")  # Define the relationship with the FoodLog model
 
@@ -67,4 +70,4 @@ class BMI(Base):
 
 
 def init_db(engine):
-    Base.metadata.create_all(bind=engine)
+    Base.metadata.drop_all(bind=engine, tables=[User.__table__])
